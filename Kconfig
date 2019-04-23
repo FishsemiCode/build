@@ -1,0 +1,17 @@
+#
+# For a description of the syntax of this configuration file,
+# see the file kconfig-language.txt in the NuttX tools repository.
+#
+
+choice
+	prompt "Select build type"
+	default BUILD_TYPE_NUTTX
+	---help---
+		Select the build type.
+
+config BUILD_TYPE_NUTTX
+	bool "Nuttx Type"
+	---help---
+		Nuttx OS based build.
+
+endchoice

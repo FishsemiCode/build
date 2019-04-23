@@ -1,0 +1,43 @@
+#
+# For a description of the syntax of this configuration file,
+# see the file kconfig-language.txt in the NuttX tools repository.
+#
+
+choice
+	prompt "Select target board"
+	---help---
+		Select the board hosting the architecture.  You must first select the
+		exact MCU part number, then the boards supporting that part will
+		be available for selection.  Use ARCH_BOARD_CUSTOM to create a new
+		board configuration.
+
+config ARCH_BOARD_ABIES
+	bool "Pinecone Abies"
+	---help---
+		Pinecone Abies SoC.
+
+config ARCH_BOARD_BANKS
+	bool "Pinecone Banks"
+	---help---
+		Pinecone Banks SoC.
+
+config ARCH_BOARD_U1
+	bool "Pinecone U1"
+	---help---
+		Pinecone U1 MCU.
+
+config ARCH_BOARD_U2
+	bool "Pinecone U2"
+	---help---
+		Pinecone U2 MCU.
+
+config ARCH_BOARD_V1
+	bool "Pinecone V1"
+	---help---
+		Pinecone V1 SoC.
+
+endchoice
+
+if ARCH_BOARD_U1
+source "configs/song/u1/Kconfig"
+endif
