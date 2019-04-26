@@ -59,10 +59,18 @@ usrsock sp &
 ril &
 #endif
 
-#ifdef CONFIG_SERVICES_RILTEST
+#ifdef CONFIG_RILTEST_AUTO_START
 riltest &
 #endif
 
-#ifdef CONFIG_SERVICES_GPSTEST
+#ifdef CONFIG_GPSTEST_AUTO_START
 gpstest &
+#endif
+
+#ifdef CONFIG_TCPTEST_AUTO_START
+tcptest -a CONFIG_SERVICES_TCPTEST_REMOTE_IP -p CONFIG_SERVICES_TCPTEST_REMOTE_PORT &
+#endif
+
+#ifdef CONFIG_FISHDEMO_AUTO_START
+fishdemo &
 #endif
