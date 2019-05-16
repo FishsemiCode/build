@@ -34,8 +34,11 @@
  ****************************************************************************/
 
 #ifdef CONFIG_FS_LITTLEFS
-mount -t littlefs -o autoformat /dev/data /data
-ln -s data persist
+mount -t littlefs -o autoformat /dev/data /persist
+mkdir /persist/data
+mkdir /persist/services
+ln -s /persist/data data
+ln -s /persist/services services
 #endif
 
 #ifdef CONFIG_RPMSG_USRSOCK

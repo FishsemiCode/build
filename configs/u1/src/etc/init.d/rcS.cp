@@ -35,7 +35,6 @@
 
 #ifdef CONFIG_FS_HOSTFS_RPMSG
 mount -t hostfs -o fs=/persist /persist
-mount -t hostfs -o fs=/data /data
 #endif
 
 #ifdef CONFIG_NBIOT_MODEM
