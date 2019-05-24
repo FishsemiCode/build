@@ -35,8 +35,8 @@
 
 #ifdef CONFIG_FS_LITTLEFS
 mount -t littlefs -o autoformat /dev/data /persist
-mkdir /persist/data
-mkdir /persist/services
+mkdir /persist/data > /dev/null
+mkdir /persist/services > /dev/null
 ln -s /persist/data data
 ln -s /persist/services services
 #endif
