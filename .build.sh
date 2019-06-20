@@ -28,6 +28,7 @@ PROJECTS=(\
 		"banks" \
 		"u1" \
 		"u2" \
+		"u3" \
 		"v1" )
 
 CONFIGS=(\
@@ -50,6 +51,11 @@ CONFIGS=(\
 		u2/audio
 		u2/ck
 		u2/m4
+		" \
+		"
+		u3/ap
+		u3/cpr
+		u3/cpx
 		" \
 		"
 		v1/vision
