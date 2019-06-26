@@ -56,6 +56,7 @@ CONFIGS=(\
 		u3/ap
 		u3/cpr
 		u3/cpx
+		u3/qemu
 		" \
 		"
 		v1/vision
