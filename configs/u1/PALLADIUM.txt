@@ -1,11 +1,8 @@
 This is about how to adjust the configs for Palladium:
 
 1. configs/u1/cp/defconfig
-   add: CONFIG_SYSLOG_RPMSG_WORK_DELAY=0
+   add: CONFIG_SYSLOG_RPMSG_WORK_DELAY=1
 
 2. configs/u1/sp/defconfig
-   add: CONFIG_SYSLOG_RPMSG_WORK_DELAY=0
+   add: CONFIG_SYSLOG_RPMSG_WORK_DELAY=1
    delete: CONFIG_MTD_GD25=y
-
-3. drivers/clk/clk.c
-   modify function: clk_disable_unused() directly return
