@@ -39,7 +39,10 @@
 
 #include <nuttx/config.h>
 
+#include <nuttx/arch.h>
 #include <arch/board/board.h>
+#include <nuttx/ioexpander/ioexpander.h>
+#include <nuttx/leds/fishled.h>
 
 #ifdef CONFIG_U1_AP
 
@@ -53,6 +56,9 @@ void board_earlyinitialize(void)
 
 void board_lateinitialize(void)
 {
+#ifdef CONFIG_FISHLED
+  fishled_initialize(g_ioe[0]);
+#endif
 }
 
 void board_finalinitialize(void)
