@@ -40,56 +40,19 @@
 #include <nuttx/config.h>
 
 #include <nuttx/arch.h>
-#include <nuttx/ioexpander/ioexpander.h>
 #include <nuttx/mtd/mtd.h>
-#include <nuttx/power/consumer.h>
 
 #include <arch/board/board.h>
 
 #ifdef CONFIG_U1_SP
 
-#define putreg32(v,a)               (*(volatile uint32_t *)(a) = (v))
-#define MUX_PIN18                   (0xb0050038)
-
 #ifdef CONFIG_MTD_GD25
 static void board_flash_init(void)
 {
   FAR struct mtd_dev_s *mtd;
-  FAR struct regulator *reg;
-  FAR bool module;
-
-  reg = regulator_get(NULL, "ldo4");
-  if (!reg)
-    {
-      syslog(LOG_ERR, "failed to get ldo4\n");
-      return;
-    }
-
-  /* XXX: temporarily set the board_id gpio pinmux, later
-   * we will use official pinmux api instead */
-  putreg32(0x12, MUX_PIN18);
-  IOEXP_SETDIRECTION(g_ioe[0], 18, IOEXPANDER_DIRECTION_IN);
-  IOEXP_READPIN(g_ioe[0], 18, &module);
-
-  /* provide different voltage for gd25 between module board and evb:
-   * module ---> 1.8V
-   * evb    ---> 3.3V */
-  if (module)
-    regulator_set_voltage(reg, 1800000, 1800000);
-  else
-    regulator_set_voltage(reg, 3300000, 3300000);
-
-  if (regulator_enable(reg))
-    {
-      regulator_put(reg);
-      syslog(LOG_ERR, "failed to enable ldo4\n");
-      return;
-    }
-
-  /* wait for the power to be stable */
-  usleep(5000);
 
   mtd = gd25_initialize(g_spi[1]);
+
   register_mtddriver("/dev/data", mtd, 0, mtd);
 }
 #endif
