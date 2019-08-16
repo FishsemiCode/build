@@ -43,6 +43,7 @@ CONFIGS=(\
 		" \
 		"
 		u1/ap
+		u1/ck
 		u1/cp
 		u1/sp
 		" \
@@ -135,6 +136,7 @@ function make_system()
 function build_board()
 {
 	local product=${1#song/}.bin
+	local elf=${1#song/}.elf
 	local apps_out=${OUTDIR}/${1#song/}/apps
 	local product_out=${OUTDIR}/${1#song/}/nuttx
 
@@ -168,6 +170,10 @@ function build_board()
 
 	if [ -f ${product_out}/nuttx.bin ]; then
 		cp -f ${product_out}/nuttx.bin ${OUTDIR}/${product}
+	fi
+
+	if [ -f ${product_out}/nuttx.strip ]; then
+		cp -f ${product_out}/nuttx.strip ${OUTDIR}/${elf}
 	fi
 
 	if [ -d ${apps_out}/exe/system ]; then
