@@ -172,8 +172,10 @@ function build_board()
 		cp -f ${product_out}/nuttx.bin ${OUTDIR}/${product}
 	fi
 
-	if [ -f ${product_out}/nuttx.strip ]; then
-		cp -f ${product_out}/nuttx.strip ${OUTDIR}/${elf}
+	if [ ${1#song/} == "u2/audio" ]; then
+		if [ -f ${product_out}/nuttx.strip ]; then
+			cp -f ${product_out}/nuttx.strip ${OUTDIR}/${elf}
+		fi
 	fi
 
 	if [ -d ${apps_out}/exe/system ]; then

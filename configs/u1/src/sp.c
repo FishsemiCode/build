@@ -40,13 +40,67 @@
 #include <nuttx/config.h>
 
 #include <nuttx/arch.h>
+#include <nuttx/environ.h>
+#include <nuttx/ioexpander/ioexpander.h>
 #include <nuttx/mtd/mtd.h>
+#include <nuttx/power/consumer.h>
 
 #include <arch/board/board.h>
+#include <string.h>
 
 #ifdef CONFIG_U1_SP
 
+/****************************************************************************
+ * Pre-processor Definitions
+ ****************************************************************************/
+
+#define putreg32(v,a)               (*(volatile uint32_t *)(a) = (v))
+#define MUX_PIN18                   (0xb0050038)
+
+/****************************************************************************
+ * Private Functions
+ ****************************************************************************/
+
 #ifdef CONFIG_MTD_GD25
+static int evb_ldo4_init(void)
+{
+  FAR struct regulator *reg;
+  FAR bool module;
+
+  reg = regulator_get(NULL, "ldo4");
+  if (!reg)
+    {
+      syslog(LOG_ERR, "failed to get ldo4\n");
+      return -ENODEV;
+    }
+
+  /* XXX: temporarily set the board_id gpio pinmux, later
+   * we will use official pinmux api instead */
+  putreg32(0x12, MUX_PIN18);
+  IOEXP_SETDIRECTION(g_ioe[0], 18, IOEXPANDER_DIRECTION_IN);
+  IOEXP_READPIN(g_ioe[0], 18, &module);
+
+  /* provide different voltage for gd25 between module board and evb:
+   * module ---> 1.8V
+   * evb    ---> 3.3V */
+  if (module)
+    regulator_set_voltage(reg, 1800000, 1800000);
+  else
+    regulator_set_voltage(reg, 3300000, 3300000);
+
+  if (regulator_enable(reg))
+    {
+      regulator_put(reg);
+      syslog(LOG_ERR, "failed to enable ldo4\n");
+      return -EINVAL;
+    }
+
+  /* wait for the power to be stable */
+  usleep(5000);
+
+  return 0;
+}
+
 static void board_flash_init(void)
 {
   FAR struct mtd_dev_s *mtd;
@@ -56,6 +110,31 @@ static void board_flash_init(void)
   register_mtddriver("/dev/data", mtd, 0, mtd);
 }
 #endif
+
+static int u1bx_ldo4_init(char * u1bx_ver)
+{
+  FAR struct regulator *reg;
+
+  reg = regulator_get(NULL, "ldo4");
+  if (!reg)
+    {
+      syslog(LOG_ERR, "failed to get ldo4\n");
+      return -ENODEV;
+    }
+
+  /*enable ldo4 and set 3.0v to supply ANT-SW on U1BOX version A*/
+  /*with no other versions currently*/
+  regulator_set_voltage(reg, 3000000, 3000000);
+
+  if (regulator_enable(reg))
+    {
+      regulator_put(reg);
+      syslog(LOG_ERR, "failed to enable ldo4\n");
+      return -EINVAL;
+    }
+
+  return 0;
+}
 
 /****************************************************************************
  * Public Functions
@@ -67,6 +146,21 @@ void board_earlyinitialize(void)
 
 void board_lateinitialize(void)
 {
+  char *id;
+
+  id = getenv_global("board-id");
+  if (!id)
+    {
+#ifdef CONFIG_MTD_GD25
+      /* Boards before U1_BOX need ldo4 enable for ext flash */
+      evb_ldo4_init();
+#endif
+    }
+  else if(4 == strspn(id, "U1BX"))
+    {
+      u1bx_ldo4_init(id+4);
+    }
+
 #ifdef CONFIG_MTD_GD25
   board_flash_init();
 #endif
