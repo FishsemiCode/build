@@ -51,6 +51,10 @@ mount -t hostfs -o fs=/data /data
 atcmd &
 #endif
 
+#ifdef CONFIG_SERVICE_SNSHUB
+snshub &
+#endif
+
 #ifdef CONFIG_RPMSG_USRSOCK
 usrsock sp &
 #endif

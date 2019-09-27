@@ -42,6 +42,7 @@
 #include <nuttx/arch.h>
 #include <arch/board/board.h>
 #include <nuttx/ioexpander/ioexpander.h>
+#include <nuttx/ioexpander/gpio.h>
 #include <nuttx/leds/fishled.h>
 
 #ifdef CONFIG_U1_AP
@@ -58,6 +59,10 @@ void board_lateinitialize(void)
 {
 #ifdef CONFIG_FISHLED
   fishled_initialize(g_ioe[0]);
+#endif
+
+#ifdef CONFIG_SNSHUB_DRIVER_ICM42605
+  gpio_lower_half(g_ioe[0], 10, GPIO_INTERRUPT_RISING_PIN, 10);
 #endif
 }
 

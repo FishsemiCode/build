@@ -46,6 +46,7 @@ CONFIGS=(\
 		u1/ck
 		u1/cp
 		u1/sp
+		u1/recovery
 		" \
 		"
 		u2/ap

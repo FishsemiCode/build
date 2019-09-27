@@ -1,8 +1,8 @@
 /****************************************************************************
- * configs/u1/src/init.d/rcS
+ * configs/u1/src/init.d/rcS.recovery
  *
- *   Copyright (C) 2018 Pinecone Inc. All rights reserved.
- *   Author: Pinecone <Pinecone@pinecone.net>
+ *   Copyright (C) 2019 FishSemi Inc. All rights reserved.
+ *   Author: FishSemi <fishsemi@fishsemi.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -32,28 +32,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  ****************************************************************************/
-set +e
 
-#include <nuttx/config.h>
-
-#include "rcS.first"
-
-#ifdef CONFIG_U1_AP
-#  include "rcS.ap"
-#elif CONFIG_U1_CK
-#  include "rcS.ck"
-#elif CONFIG_U1_CP
-#  include "rcS.cp"
-#elif CONFIG_U1_SP
-#  include "rcS.sp"
-#elif CONFIG_U1_FVP
-#  include "rcS.fvp"
-#elif CONFIG_U1_RECOVERY
-#  include "rcS.recovery"
-#elif CONFIG_U1_SIM
-#  include "rcS.sim"
-#else
-#  error "unknow u1 config"
+#ifdef CONFIG_FS_LITTLEFS
+mount -t littlefs -o autoformat /dev/data /persist
+mount -t littlefs -o autoformat /dev/data-nand /nand > /dev/null
+mkdir /persist/data > /dev/null
+mkdir /persist/services > /dev/null
+ln -s /persist/data data
+ln -s /persist/services services
 #endif
-
-#include "rcS.last"

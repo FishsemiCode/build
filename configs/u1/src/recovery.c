@@ -1,8 +1,8 @@
 /****************************************************************************
- * configs/u1/src/sp.c
+ * configs/u1/src/recovery.c
  *
- *   Copyright (C) 2018 Pinecone Inc. All rights reserved.
- *   Author: Xiang Xiao <xiaoxiang@pinecone.net>
+ *   Copyright (C) 2019 FishSemi Inc. All rights reserved.
+ *   Author: Fishsemi <fishsemi@fishsemi.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -48,7 +48,7 @@
 #include <arch/board/board.h>
 #include <string.h>
 
-#ifdef CONFIG_U1_SP
+#ifdef CONFIG_U1_RECOVERY
 
 /****************************************************************************
  * Pre-processor Definitions
