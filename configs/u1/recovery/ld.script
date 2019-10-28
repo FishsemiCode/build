@@ -35,7 +35,9 @@
 
 MEMORY
 {
-	flash (rx)  : ORIGIN = 0x02000000, LENGTH = 256K
+	flash (rx)  : ORIGIN = 0x02040000, LENGTH = 256K
+	cpram (rwx) : ORIGIN = 0x60000000, LENGTH = 160K
+	cpram1(rwx) : ORIGIN = 0x60028000, LENGTH = 304K
 	spram (rwx) : ORIGIN = 0x21000000, LENGTH = 112K
 	apram (rwx) : ORIGIN = 0xb1000000, LENGTH = 192K
 }
@@ -73,35 +75,35 @@ SECTIONS
 		*(.gcc_except_table)
 		*(.gnu.linkonce.r.*)
 		_etext = ABSOLUTE(.);
-	} > spram AT > flash
+	} > cpram AT > flash
 
 	.init_section : {
 		_sinit = ABSOLUTE(.);
 		KEEP(*(.init_array .init_array.*))
 		_einit = ABSOLUTE(.);
-	} > spram AT > flash
+	} > cpram AT > flash
 
 	.ARM.extab : {
 		*(.ARM.extab*)
-	} > spram AT > flash
+	} > cpram AT > flash
 
 	__exidx_start = ABSOLUTE(.);
 	.ARM.exidx : {
 		*(.ARM.exidx*)
-	} > spram AT > flash
+	} > cpram AT > flash
 	__exidx_end = ABSOLUTE(.);
 
 	.copy.table : {
 		_scopytable = ABSOLUTE(.);
 		_ecopytable = ABSOLUTE(.);
-	} > spram AT > flash
+	} > cpram AT > flash
 
 	_framfuncs = LOADADDR(.ramfunc);
 	.ramfunc : {
 		_sramfuncs = ABSOLUTE(.);
 		*(.ramfunc .ramfunc.*)
 		_eramfuncs = ABSOLUTE(.);
-	} > spram AT > flash
+	} > cpram AT > flash
 
 	_eflashap = LOADADDR(.data);
 	_eronly = LOADADDR(.data);
@@ -114,7 +116,7 @@ SECTIONS
 		*(.gnu.linkonce.d.*)
 		CONSTRUCTORS
 		_edata = ABSOLUTE(.);
-	} > apram AT > flash
+	} > spram AT > flash
 
 	_eflash = LOADADDR(.data) + SIZEOF(.data);
 
@@ -125,9 +127,15 @@ SECTIONS
 		*(COMMON)
 		. = ALIGN(8);
 		_ebss = ABSOLUTE(.);
-	} > apram
+	} > spram
 
-	_eheap = ORIGIN(apram) + LENGTH(apram);
+	_eheap = ORIGIN(spram) + LENGTH(spram);
+
+	_sheap2 = ORIGIN(cpram1);
+	_eheap2 = ORIGIN(cpram1) + LENGTH(cpram1);
+
+	_apram_base = ORIGIN(apram);
+	_apram_size = LENGTH(apram);
 
 	/* Stabs debugging sections. */
 	.stab 0 : { *(.stab) }

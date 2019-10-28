@@ -41,3 +41,7 @@ mkdir /persist/services > /dev/null
 ln -s /persist/data data
 ln -s /persist/services services
 #endif
+
+#ifdef CONFIG_SYSTEM_RECOVERY
+recovery &
+#endif

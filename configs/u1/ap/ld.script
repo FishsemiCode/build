@@ -110,7 +110,11 @@ SECTIONS
 		_ebss = ABSOLUTE(.);
 	} > sram
 
-	_eheap = ORIGIN(sram) + LENGTH(sram);
+	_eheap = _sdumplog;
+
+	_sdumplog = _edumplog - _dumplogsize;
+	_edumplog = ORIGIN(sram) + LENGTH(sram);
+	_dumplogsize = 4096;
 
 	/* Stabs debugging sections. */
 	.stab 0 : { *(.stab) }

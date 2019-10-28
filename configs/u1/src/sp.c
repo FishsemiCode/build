@@ -141,23 +141,21 @@ void board_lateinitialize(void)
   char *id;
 
   id = getenv_global("board-id");
-  if (!id)
-    {
-#ifdef CONFIG_MTD_GD25
-      /* Boards before U1_BOX need ldo4 enable for ext flash */
-      evb_ldo4_init();
-#endif
-    }
-  else if(4 == strspn(id, "U1BX"))
-    {
-      u1bx_ldo4_init(id+4);
-
+  if(id && !strncmp(id, "U1BX", 4))
+  {
+    u1bx_ldo4_init(id+4);
 #ifdef CONFIG_MTD_GD5F
-      mtd = gd5f_initialize(g_spi[1], 1);
-
-      register_mtddriver("/dev/data-nand", mtd, 0, mtd);
+    mtd = gd5f_initialize(g_spi[1], 1);
+    register_mtddriver("/dev/data-nand", mtd, 0, mtd);
 #endif
-    }
+  }
+  else
+  {
+#ifdef CONFIG_MTD_GD25
+    /* Boards before U1_BOX need ldo4 enable for ext flash */
+    evb_ldo4_init();
+#endif
+  }
 
 #ifdef CONFIG_MTD_GD25
   mtd = gd25_initialize(g_spi[1], 0);
