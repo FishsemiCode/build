@@ -1,8 +1,8 @@
 /****************************************************************************
- * configs/u1/src/ap.c
+ * config/song/u1/song/src/board.h
  *
- *   Copyright (C) 2018 Pinecone Inc. All rights reserved.
- *   Author: Xiang Xiao <xiaoxiang@pinecone.net>
+ *   Copyright (C) 2019 Fishsemi Inc. All rights reserved.
+ *   Author: clyde <liuyan@fishsemi.com>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -33,69 +33,13 @@
  *
  ****************************************************************************/
 
-/****************************************************************************
- * Included Files
- ****************************************************************************/
+#ifndef __CONFIG_SONG_U1_SONG_SRC_BOARD_H
+#define __CONFIG_SONG_U1_SONG_SRC_BOARD_H
 
-#include <nuttx/config.h>
-
-#include <nuttx/arch.h>
-#include <arch/board/board.h>
-#include <nuttx/ioexpander/ioexpander.h>
-#include <nuttx/ioexpander/gpio.h>
-#include <nuttx/leds/fishled.h>
-#include <nuttx/lcd/ili9486_lcd.h>
-#include "board.h"
-
-#ifdef CONFIG_U1_AP
-
-#ifdef CONFIG_LCD_ILI9486
-static void up_lcd_ili9486_init(void)
-{
-  static const struct lcd_ili9486_config_s config =
-  {
-    .power_gpio = 37,
-    .rst_gpio = 36,
-    .spi_cs_num = 0,
-    .spi_rs_gpio = 38,
-    /* freq max 27M */
-    .spi_freq = 26000000,
-    .spi_nbits = 16,
-  };
-
-  lcd_ili9486_register(&config, g_spi[0], g_ioe[0]);
-}
-#endif
-
-/****************************************************************************
- * Public Functions
- ****************************************************************************/
-
-void board_earlyinitialize(void)
-{
-}
-
-void board_lateinitialize(void)
-{
-#ifdef CONFIG_FISHLED
-  fishled_initialize(g_ioe[0]);
-#endif
-
-#ifdef CONFIG_SNSHUB_DRIVER_ICM42605
-  gpio_lower_half(g_ioe[0], 10, GPIO_INTERRUPT_RISING_PIN, 10);
-#endif
-
-#ifdef CONFIG_LCD_ILI9486
-  up_lcd_ili9486_init();
-#endif
+/* touchscreen device setup ************************************************/
 
 #ifdef CONFIG_INPUT_ADS7843E
-  ap_ads7843e_tsc_setup();
+int ap_ads7843e_tsc_setup(void);
 #endif
-}
-
-void board_finalinitialize(void)
-{
-}
 
 #endif

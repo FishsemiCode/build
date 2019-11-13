@@ -37,4 +37,4 @@ include ${TOPDIR}/.config
 include ${TOPDIR}/tools/Config.mk
 include ${TOPDIR}/arch/csky/src/song/Toolchain.defs
 
-ARCHSCRIPT = -T$(TOPDIR)/configs/song/u1/ck/ld.script
+LDSCRIPT = $(TOPDIR)/configs/song/u1/ck/ld.script

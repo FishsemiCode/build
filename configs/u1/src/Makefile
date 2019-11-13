@@ -36,6 +36,11 @@
 -include $(TOPDIR)/Make.defs
 
 CSRCS += ap.c ck.c cp.c fvp.c recovery.c sim.c sp.c
+
+ifeq ($(CONFIG_INPUT_ADS7843E),y)
+CSRCS += ap_ads7843e_touchscreen.c
+endif
+
 RCSRCS := rcS
 ifeq ($(CONFIG_NBIOT_MODEM),y)
 RCRAWS += etc/NVM
