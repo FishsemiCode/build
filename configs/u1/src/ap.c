@@ -45,9 +45,20 @@
 #include <nuttx/ioexpander/gpio.h>
 #include <nuttx/leds/fishled.h>
 #include <nuttx/lcd/ili9486_lcd.h>
-#include "board.h"
 
 #ifdef CONFIG_U1_AP
+
+/****************************************************************************
+ * Public Functions Prototypes
+ ****************************************************************************/
+
+#ifdef CONFIG_INPUT_ADS7843E
+extern int ap_ads7843e_tsc_setup(void);
+#endif
+
+/****************************************************************************
+ * Private Functions
+ ****************************************************************************/
 
 #ifdef CONFIG_LCD_ILI9486
 static void up_lcd_ili9486_init(void)

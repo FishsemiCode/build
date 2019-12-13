@@ -102,7 +102,7 @@ static int evb_ldo4_init(void)
 }
 #endif
 
-static int u1bx_ldo4_init(char * u1bx_ver)
+static int antsw_ldo4_init(char * u1bx_ver)
 {
   FAR struct regulator *reg;
 
@@ -143,16 +143,23 @@ void board_lateinitialize(void)
   id = getenv_global("board-id");
   if(id && !strncmp(id, "U1BX", 4))
   {
-    u1bx_ldo4_init(id+4);
+    /*ldo4 -> antenna switch*/
+    antsw_ldo4_init(id+4);
+    /*nand flash on board*/
 #ifdef CONFIG_MTD_GD5F
     mtd = gd5f_initialize(g_spi[1], 1);
     register_mtddriver("/dev/data-nand", mtd, 0, mtd);
 #endif
   }
+  else if(id && !strncmp(id, "U1SK", 4))
+  {
+    /*ldo4 -> antenna switch*/
+    antsw_ldo4_init(id+4);
+  }
   else
   {
 #ifdef CONFIG_MTD_GD25
-    /* Boards before U1_BOX need ldo4 enable for ext flash */
+    /*ldo4 -> spi flash*/
     evb_ldo4_init();
 #endif
   }
