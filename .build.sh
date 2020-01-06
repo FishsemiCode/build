@@ -27,6 +27,7 @@ PROJECTS=(\
 		"abies" \
 		"banks" \
 		"u1" \
+		"u11" \
 		"u2" \
 		"u3" \
 		"v1" )
@@ -47,6 +48,11 @@ CONFIGS=(\
 		u1/cp
 		u1/sp
 		u1/recovery
+		" \
+		"
+		u11/ap
+		u11/ck
+		u11/cp
 		" \
 		"
 		u2/ap
@@ -173,7 +179,7 @@ function build_board()
 		cp -f ${product_out}/nuttx.bin ${OUTDIR}/${product}
 	fi
 
-	if [ ${1#song/} == "u2/audio" ]; then
+	if [[ ${1#song/} == "u2/audio" ]] || [[ ${1#song/} == "u3/cpr" ]]; then
 		if [ -f ${product_out}/nuttx.strip ]; then
 			cp -f ${product_out}/nuttx.strip ${OUTDIR}/${elf}
 		fi
