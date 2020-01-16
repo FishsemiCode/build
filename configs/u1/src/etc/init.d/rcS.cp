@@ -33,9 +33,15 @@
  *
  ****************************************************************************/
 
+#if defined(CONFIG_FS_LITTLEFS) && defined(CONFIG_RAMDISK)
+mount -t littlefs -o autoformat /dev/ram1 /diskcp
+#endif
+
 #ifdef CONFIG_FS_HOSTFS_RPMSG
 mount -t hostfs -o fs=/persist /persist
 mount -t hostfs -o fs=/log /log
+mount -t hostfs -o fs=/disksp/amtw /amtw
+mount -t hostfs -o fs=/onchip/amtr /amtr
 #endif
 
 #ifdef CONFIG_NBIOT_MODEM

@@ -33,6 +33,10 @@
  *
  ****************************************************************************/
 
+#if defined(CONFIG_FS_LITTLEFS) && defined(CONFIG_RAMDISK)
+mount -t littlefs -o autoformat /dev/ram1 /diskap
+#endif
+
 #if defined(CONFIG_RPMSG_USRSOCK) && \
     defined(CONFIG_FS_HOSTFS_RPMSG) && \
     defined(CONFIG_NSH_PROC_MOUNTPOINT)

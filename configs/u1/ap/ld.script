@@ -33,10 +33,17 @@
  *
  ****************************************************************************/
 
+#include <nuttx/config.h>
+
 MEMORY
 {
 	flash (rx) : ORIGIN = 0x00000000, LENGTH = 640K
+
+#ifdef CONFIG_RAMDISK
+	sram (rwx) : ORIGIN = 0x2100d000, LENGTH = 140K
+#else
 	sram (rwx) : ORIGIN = 0x21000000, LENGTH = 192K
+#endif
 }
 
 ENTRY(_stext)

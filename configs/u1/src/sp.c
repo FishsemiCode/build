@@ -169,8 +169,10 @@ void board_lateinitialize(void)
 
 #ifdef CONFIG_MTD_GD25
   mtd = gd25_initialize(g_spi[1], 0);
-
-  register_mtddriver("/dev/data", mtd, 0, mtd);
+  if(mtd)
+    {
+      register_mtddriver("/dev/data", mtd, 0, mtd);
+    }
 #endif
 }
 
