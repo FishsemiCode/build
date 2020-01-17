@@ -144,6 +144,7 @@ function build_board()
 {
 	local product=${1#song/}.bin
 	local elf=${1#song/}.elf
+	local coff=${1#song/}.coff
 	local apps_out=${OUTDIR}/${1#song/}/apps
 	local product_out=${OUTDIR}/${1#song/}/nuttx
 
@@ -182,6 +183,12 @@ function build_board()
 	if [[ ${1#song/} == "u2/audio" ]] || [[ ${1#song/} == "u3/cpr" ]]; then
 		if [ -f ${product_out}/nuttx.strip ]; then
 			cp -f ${product_out}/nuttx.strip ${OUTDIR}/${elf}
+		fi
+	fi
+
+	if [[ ${1#song/} == "u3/cpx" ]]; then
+		if [ -f ${product_out}/nuttx.a ]; then
+			cp -f ${product_out}/nuttx.a ${OUTDIR}/${coff}
 		fi
 	fi
 
