@@ -33,13 +33,10 @@
  *
  ****************************************************************************/
 
-#if defined(CONFIG_FS_LITTLEFS) && defined(CONFIG_RAMDISK)
-mount -t littlefs -o autoformat /dev/ram1 /diskap
-#endif
-
 #if defined(CONFIG_RPMSG_USRSOCK) && \
     defined(CONFIG_FS_HOSTFS_RPMSG) && \
-    defined(CONFIG_NSH_PROC_MOUNTPOINT)
+    defined(CONFIG_NSH_PROC_MOUNTPOINT) && \
+    defined(CONFIG_FS_UNIONFS)
 umount CONFIG_NSH_PROC_MOUNTPOINT
 mount -t procfs /proc1
 mount -t hostfs -o fs=/proc/net /net2
@@ -47,6 +44,7 @@ mount -t unionfs -o fspath1=/proc1,fspath2=/net2,prefix2=net CONFIG_NSH_PROC_MOU
 #endif
 
 #ifdef CONFIG_FS_HOSTFS_RPMSG
+mount -t hostfs -o fs=/onchip/chipap /onchip
 mount -t hostfs -o fs=/data /data
 mount -t hostfs -o fs=/services /services
 mount -t hostfs -o fs=/nand /nand

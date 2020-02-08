@@ -44,6 +44,7 @@ CONFIGS=(\
 		" \
 		"
 		u1/ap
+		u1/aplite
 		u1/ck
 		u1/cp
 		u1/sp

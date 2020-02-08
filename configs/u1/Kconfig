@@ -9,6 +9,9 @@ choice
 config U1_AP
 	bool "U1 AP"
 
+config U1_APLITE
+	bool "U1 APLITE"
+
 config U1_CK
 	bool "U1 CK"
 

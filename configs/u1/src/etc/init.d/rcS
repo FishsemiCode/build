@@ -40,6 +40,8 @@ set +e
 
 #ifdef CONFIG_U1_AP
 #  include "rcS.ap"
+#elif CONFIG_U1_APLITE
+#  include "rcS.ap"
 #elif CONFIG_U1_CK
 #  include "rcS.ck"
 #elif CONFIG_U1_CP

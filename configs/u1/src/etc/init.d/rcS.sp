@@ -37,12 +37,11 @@
 
 #ifdef CONFIG_RAMDISK
 mount -t littlefs -o autoformat /dev/ram1 /disksp
-mkdir /disksp/amtw > /dev/null
 mkdir /disksp/retent > /dev/null
 #endif
 
 mount -t littlefs -o autoformat /dev/persist /onchip
-mkdir /onchip/amtr > /dev/null
+mkdir /onchip/chipap > /dev/null
 
 mount -t littlefs -o autoformat /dev/data /persist
 mount -t littlefs -o autoformat /dev/data-nand /nand > /dev/null

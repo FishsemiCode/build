@@ -46,7 +46,7 @@
 #include <nuttx/leds/fishled.h>
 #include <nuttx/lcd/ili9486_lcd.h>
 
-#ifdef CONFIG_U1_AP
+#if defined(CONFIG_U1_AP) || defined(CONFIG_U1_APLITE)
 
 /****************************************************************************
  * Public Functions Prototypes
@@ -109,4 +109,4 @@ void board_finalinitialize(void)
 {
 }
 
-#endif
+#endif /* defined(CONFIG_U1_AP) || defined(CONFIG_U1_APLITE) */
