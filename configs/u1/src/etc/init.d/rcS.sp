@@ -35,24 +35,48 @@
 
 #ifdef CONFIG_FS_LITTLEFS
 
-#ifdef CONFIG_RAMDISK
-mount -t littlefs -o autoformat /dev/ram1 /disksp
-mkdir /disksp/retent > /dev/null
+  /* Mount RAMDISK */
+
+  #ifdef CONFIG_RAMDISK
+    mount -t littlefs -o autoformat /dev/ram1 /disksp
+    if [ $? -eq 0 ]; then
+      mkdir /disksp/retent >/dev/null
+    fi
+  #endif
+
+  /* Mount externl nand-flash to /nand */
+
+  mount -t littlefs -o autoformat /dev/data-nand /nand > /dev/null
+
+  /* Mount external flash to /persist */
+
+  mount -t littlefs -o autoformat /dev/data /persist >/dev/null
+  if [ $? -eq 0 ]; then
+    mkdir /persist/data >/dev/null
+    mkdir /persist/services >/dev/null
+    mkdir /persist/log >/dev/null
+    ln -s /persist/data data
+    ln -s /persist/services services
+    ln -s /persist/log log
+  fi
+
+  /* Mount internal flash to /onchip */
+
+  mount -t littlefs -o autoformat /dev/persist /onchip
+  if [ $? -eq 0 ]; then
+    if [ ! -d "/data" ]; then
+    mkdir /onchip/chipap >/dev/null
+    fi
+  fi
+
 #endif
 
-mount -t littlefs -o autoformat /dev/persist /onchip
-mkdir /onchip/chipap > /dev/null
-
-mount -t littlefs -o autoformat /dev/data /persist
-mount -t littlefs -o autoformat /dev/data-nand /nand > /dev/null
-mkdir /persist/data > /dev/null
-mkdir /persist/services > /dev/null
-mkdir /persist/log > /dev/null
-ln -s /persist/data data
-ln -s /persist/services services
-ln -s /persist/log log
+#ifdef CONFIG_FS_TMPFS
+  if [ ! -d "/data" ]; then
+    ln -s /tmp /data
+  fi
 #endif
 
 #ifdef CONFIG_RPMSG_USRSOCK
-usrsock &
+  usrsock &
 #endif
