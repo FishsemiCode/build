@@ -103,6 +103,11 @@ SECTIONS
 
 	_eflash = LOADADDR(.data) + SIZEOF(.data);
 
+	.noload (NOLOAD) : {
+		*(.dma .dma.*)
+		*(.ram_vectors .ram_vectors.*)
+	} > sram
+
 	.bss : {
 		_sbss = ABSOLUTE(.);
 		*(.bss .bss.*)

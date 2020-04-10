@@ -21,7 +21,9 @@ commands=()
 ROOTDIR=$(cd "$( dirname "$0"  )" && pwd)
 OUTDIR=${ROOTDIR}/out
 BUILDDIR=${ROOTDIR}/build
+MKBOOTDIR=${ROOTDIR}/vendor/tools/host/mkbootimg
 ROOTDIR=${ROOTDIR}/nuttx
+SIGNKEY=none
 
 PROJECTS=(\
 		"abies" \
@@ -144,11 +146,12 @@ function make_system()
 
 function build_board()
 {
-	local product=${1#song/}.bin
-	local elf=${1#song/}.elf
-	local coff=${1#song/}.coff
-	local apps_out=${OUTDIR}/${1#song/}/apps
-	local product_out=${OUTDIR}/${1#song/}/nuttx
+	local core=${1#song/}
+	local product=${core}.bin
+	local elf=${core}.elf
+	local coff=${core}.coff
+	local apps_out=${OUTDIR}/${core}/apps
+	local product_out=${OUTDIR}/${core}/nuttx
 
 	echo -e "\nCompile Command line:\n"
 	echo -e "	${ROOTDIR}/tools/configure.sh ${HOST_FLAG} -o ${product_out} ${1}"
@@ -182,20 +185,32 @@ function build_board()
 		cp -f ${product_out}/nuttx.bin ${OUTDIR}/${product}
 	fi
 
-	if [[ ${1#song/} == "u2/audio" ]] || [[ ${1#song/} == "u3/cpr" ]]; then
+	if [[ ${core} == "u2/audio" ]] || [[ ${core} == "u3/cpr" ]]; then
 		if [ -f ${product_out}/nuttx.strip ]; then
 			cp -f ${product_out}/nuttx.strip ${OUTDIR}/${elf}
 		fi
 	fi
 
-	if [[ ${1#song/} == "u3/cpx" ]]; then
+	if [[ ${core} == "u3/cpx" ]]; then
 		if [ -f ${product_out}/nuttx.a ]; then
 			cp -f ${product_out}/nuttx.a ${OUTDIR}/${coff}
 		fi
 	fi
 
 	if [ -d ${apps_out}/exe/system ]; then
-		make_system ${product_out} ${OUTDIR}/${1#song/}/../system.bin ${apps_out}/exe/system
+		make_system ${product_out} ${OUTDIR}/${core}/../system.bin ${apps_out}/exe/system
+	fi
+
+	if [[ ${SIGNKEY} != none ]]; then
+		echo "============================ Signature begin ============================"
+		make -C ${MKBOOTDIR} PROJECT=${core%/*}
+		${MKBOOTDIR}/mkboot --kernel ${product_out}/nuttx.bin --privkey ${SIGNKEY} --pubkeyout ${OUTDIR}/${core%/*}/pubkey.bin -o ${OUTDIR}/${product}
+		if [ $? -ne 0 ]; then
+			echo "Signature to ${product_out}/nuttx.bin failed!!!"
+		else
+			echo "Signature ${core}: ${OUTDIR}/${product} success!!!"
+			echo "Generate pubkey: ${OUTDIR}/${core%/*}/pubkey.bin success!!!"
+		fi
 	fi
 }
 
@@ -217,6 +232,10 @@ while [ ! -z "$1" ]; do
 				echo "Error: Unable to find the board or configurations from $1"
 				exit 2
 			fi
+			;;
+		-s )
+			shift
+			SIGNKEY=$1
 			;;
 		-h )
 			usage
