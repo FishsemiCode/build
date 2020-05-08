@@ -48,7 +48,7 @@
 #include <arch/board/board.h>
 #include <string.h>
 
-#ifdef CONFIG_U1_SP
+#if defined(CONFIG_U1_SP) || defined(CONFIG_U1_RECOVERY)
 
 /****************************************************************************
  * Pre-processor Definitions

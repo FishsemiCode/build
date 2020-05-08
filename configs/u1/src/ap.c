@@ -45,6 +45,8 @@
 #include <nuttx/ioexpander/gpio.h>
 #include <nuttx/leds/fishled.h>
 #include <nuttx/lcd/ili9486_lcd.h>
+#include <nuttx/mtd/mtd.h>
+#include <nuttx/i2c/tca6424a.h>
 
 #if defined(CONFIG_U1_AP) || defined(CONFIG_U1_APLITE)
 
@@ -88,6 +90,10 @@ void board_earlyinitialize(void)
 
 void board_lateinitialize(void)
 {
+#ifdef CONFIG_MTD_GD25
+  FAR struct mtd_dev_s *mtd;
+#endif
+
 #ifdef CONFIG_FISHLED
   fishled_initialize(g_ioe[0]);
 #endif
@@ -102,6 +108,19 @@ void board_lateinitialize(void)
 
 #ifdef CONFIG_INPUT_ADS7843E
   ap_ads7843e_tsc_setup();
+#endif
+
+#ifdef CONFIG_MTD_GD25
+  mtd = gd25_initialize(g_spi[0], 0);
+  if(mtd)
+    {
+      register_mtddriver("/dev/ctdata", mtd, 0, mtd);
+    }
+#endif
+
+#ifdef CONFIG_I2C_TCA6424A
+  tca6424a_register(g_i2c[0], 0);
+  tca6424a_register(g_i2c[1], 1);
 #endif
 }
 

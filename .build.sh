@@ -59,7 +59,6 @@ CONFIGS=(\
 		" \
 		"
 		u2/ap
-        u2/aptws
 		u2/audio
 		u2/ck
 		u2/m4
