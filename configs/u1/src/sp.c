@@ -57,9 +57,17 @@
 #define putreg32(v,a)               (*(volatile uint32_t *)(a) = (v))
 #define MUX_PIN18                   (0xb0050038)
 
+#define TOP_PMICFSM_BASE            (0xb2010000)
+#define TOP_PMICFSM_PLLTIME         (TOP_PMICFSM_BASE + 0xe8)
+
 /****************************************************************************
  * Private Functions
  ****************************************************************************/
+
+static inline bool chip_is_u1v1(void)
+{
+  return (*(volatile uint32_t *)(TOP_PMICFSM_PLLTIME)) == 0xdeadbeaf;
+}
 
 #ifdef CONFIG_MTD_GD25
 static int evb_ldo4_init(void)
@@ -76,9 +84,16 @@ static int evb_ldo4_init(void)
 
   /* XXX: temporarily set the board_id gpio pinmux, later
    * we will use official pinmux api instead */
-  putreg32(0x12, MUX_PIN18);
-  IOEXP_SETDIRECTION(g_ioe[0], 18, IOEXPANDER_DIRECTION_IN);
-  IOEXP_READPIN(g_ioe[0], 18, &module);
+  if (chip_is_u1v1())
+    {
+      putreg32(0x12, MUX_PIN18);
+      IOEXP_SETDIRECTION(g_ioe[0], 18, IOEXPANDER_DIRECTION_IN);
+      IOEXP_READPIN(g_ioe[0], 18, &module);
+    }
+  else
+    {
+      module = false;
+    }
 
   /* provide different voltage for gd25 between module board and evb:
    * module ---> 1.8V
