@@ -1,8 +1,8 @@
 /****************************************************************************
- * configs/u1/src/init.d/rcS.ap
+ * configs/u2/include/nsh_romfsimg.h
  *
  *   Copyright (C) 2018 Pinecone Inc. All rights reserved.
- *   Author: Pinecone <Pinecone@pinecone.net>
+ *   Author: Pinecone <pinecone@pinecone.net>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -33,56 +33,8 @@
  *
  ****************************************************************************/
 
-#if defined(CONFIG_RPMSG_USRSOCK) && \
-    defined(CONFIG_FS_HOSTFS_RPMSG) && \
-    defined(CONFIG_NSH_PROC_MOUNTPOINT) && \
-    defined(CONFIG_FS_UNIONFS)
-umount CONFIG_NSH_PROC_MOUNTPOINT
-mount -t procfs /proc1
-mount -t hostfs -o fs=/proc/net /net2
-mount -t unionfs -o fspath1=/proc1,fspath2=/net2,prefix2=net CONFIG_NSH_PROC_MOUNTPOINT
-#endif
-
-#ifdef CONFIG_FS_HOSTFS_RPMSG
-mount -t hostfs -o fs=/data /data
-mount -t hostfs -o fs=/services /services
-mount -t hostfs -o fs=/nand /nand
-mount -t hostfs -o fs=/log /log
-#endif
-
-#ifdef CONFIG_SERVICES_ATCMD
-atcmd &
-#endif
-
-#ifdef CONFIG_SERVICE_SNSHUB
-snshub &
-#endif
-
-#ifdef CONFIG_RPMSG_USRSOCK
-usrsock sp &
-#endif
-
-#ifdef CONFIG_SERVICES_RIL
-ril &
-#endif
-
-#ifdef CONFIG_RILTEST_AUTO_START
-riltest &
-#endif
-
-#ifdef CONFIG_GPSTEST_AUTO_START
-gpstest &
-#endif
-
-#ifdef CONFIG_TCPTEST_AUTO_START
-tcptest -a CONFIG_SERVICES_TCPTEST_REMOTE_IP -p CONFIG_SERVICES_TCPTEST_REMOTE_PORT &
-#endif
-
-#ifdef CONFIG_FISHDEMO_AUTO_START
-fishdemo &
-#endif
-
-#ifdef CONFIG_SERVICES_SOFTSIM
-mount -t hostfs -o fs=/dev /devsp
-softsim &
+#ifndef __CONFIGS_U1_INCLUDE_NSH_ROMFSIMG_H
+#define __CONFIGS_U1_INCLUDE_NSH_ROMFSIMG_H
+extern const unsigned char romfs_img[];
+extern const unsigned int romfs_img_len;
 #endif

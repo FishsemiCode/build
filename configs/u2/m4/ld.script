@@ -1,8 +1,8 @@
 /****************************************************************************
- * configs/u1/ap/ld.script
+ * configs/u2/m4/ld.script
  *
  *   Copyright (C) 2017 Pinecone Inc. All rights reserved.
- *   Author: Xiang Xiao <xiaoxiang@pinecone.net>
+ *   Author: Wang Yanjiong <wangyanjiong@pinecone.net>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -33,12 +33,11 @@
  *
  ****************************************************************************/
 
-#include <nuttx/config.h>
-
 MEMORY
 {
-	flash (rx) : ORIGIN = 0x00000000, LENGTH = 448K
-	sram (rwx) : ORIGIN = 0x21004000, LENGTH = 176K
+	sram (rx)   : ORIGIN = 0x01000000, LENGTH = 512K
+	shram0 (rw) : ORIGIN = 0x60000000, LENGTH = 128K
+	shram1 (rw) : ORIGIN = 0x60100000, LENGTH = 512K
 }
 
 ENTRY(_stext)
@@ -53,7 +52,7 @@ SECTIONS
 		/* image magic */
 		LONG(0x21494350)
 		LONG(_stext)
-		LONG(_eflash - _stext)
+		LONG(_edata - _stext)
 		LONG(__start)
 
 		*(.text .text.*)
@@ -67,30 +66,23 @@ SECTIONS
 		*(.gcc_except_table)
 		*(.gnu.linkonce.r.*)
 		_etext = ABSOLUTE(.);
-	} > flash
+	} > sram
 
 	.init_section : {
 		_sinit = ABSOLUTE(.);
 		KEEP(*(.init_array .init_array.*))
 		_einit = ABSOLUTE(.);
-	} > flash
+	} > sram
 
 	.ARM.extab : {
 		*(.ARM.extab*)
-	} > flash
+	} > sram
 
 	__exidx_start = ABSOLUTE(.);
 	.ARM.exidx : {
 		*(.ARM.exidx*)
-	} > flash
+	} > sram
 	__exidx_end = ABSOLUTE(.);
-
-	_framfuncs = LOADADDR(.ramfunc);
-	.ramfunc : {
-		_sramfuncs = ABSOLUTE(.);
-		*(.ramfunc .ramfunc.*)
-		_eramfuncs = ABSOLUTE(.);
-	} > sram AT > flash
 
 	_eronly = LOADADDR(.data);
 	.data : {
@@ -99,13 +91,6 @@ SECTIONS
 		*(.gnu.linkonce.d.*)
 		CONSTRUCTORS
 		_edata = ABSOLUTE(.);
-	} > sram AT > flash
-
-	_eflash = LOADADDR(.data) + SIZEOF(.data);
-
-	.noload (NOLOAD) : {
-		*(.dma .dma.*)
-		*(.ram_vectors .ram_vectors.*)
 	} > sram
 
 	.bss : {
@@ -117,11 +102,13 @@ SECTIONS
 		_ebss = ABSOLUTE(.);
 	} > sram
 
-	_eheap = _sdumplog;
+	_eheap = ORIGIN(sram) + LENGTH(sram);
 
-	_sdumplog = _edumplog - _dumplogsize;
-	_edumplog = ORIGIN(sram) + LENGTH(sram);
-	_dumplogsize = 4096;
+	_sheap2 = ORIGIN(shram0);
+	_eheap2 = ORIGIN(shram0) + LENGTH(shram0);
+
+	_sheap3 = ORIGIN(shram1);
+	_eheap3 = ORIGIN(shram1) + LENGTH(shram1);
 
 	/* Stabs debugging sections. */
 	.stab 0 : { *(.stab) }

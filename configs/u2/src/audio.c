@@ -1,8 +1,8 @@
 /****************************************************************************
- * configs/u1/src/init.d/rcS.ap
+ * configs/u2/src/audio.c
  *
- *   Copyright (C) 2018 Pinecone Inc. All rights reserved.
- *   Author: Pinecone <Pinecone@pinecone.net>
+ *   Copyright (C) 2019 Pinecone Inc. All rights reserved.
+ *   Author: Xiang Xiao <xiaoxiang@pinecone.net>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -33,56 +33,30 @@
  *
  ****************************************************************************/
 
-#if defined(CONFIG_RPMSG_USRSOCK) && \
-    defined(CONFIG_FS_HOSTFS_RPMSG) && \
-    defined(CONFIG_NSH_PROC_MOUNTPOINT) && \
-    defined(CONFIG_FS_UNIONFS)
-umount CONFIG_NSH_PROC_MOUNTPOINT
-mount -t procfs /proc1
-mount -t hostfs -o fs=/proc/net /net2
-mount -t unionfs -o fspath1=/proc1,fspath2=/net2,prefix2=net CONFIG_NSH_PROC_MOUNTPOINT
-#endif
+/****************************************************************************
+ * Included Files
+ ****************************************************************************/
 
-#ifdef CONFIG_FS_HOSTFS_RPMSG
-mount -t hostfs -o fs=/data /data
-mount -t hostfs -o fs=/services /services
-mount -t hostfs -o fs=/nand /nand
-mount -t hostfs -o fs=/log /log
-#endif
+#include <nuttx/config.h>
 
-#ifdef CONFIG_SERVICES_ATCMD
-atcmd &
-#endif
+#include <arch/board/board.h>
 
-#ifdef CONFIG_SERVICE_SNSHUB
-snshub &
-#endif
+#ifdef CONFIG_U2_AUDIO
 
-#ifdef CONFIG_RPMSG_USRSOCK
-usrsock sp &
-#endif
+/****************************************************************************
+ * Public Functions
+ ****************************************************************************/
 
-#ifdef CONFIG_SERVICES_RIL
-ril &
-#endif
+void board_earlyinitialize(void)
+{
+}
 
-#ifdef CONFIG_RILTEST_AUTO_START
-riltest &
-#endif
+void board_lateinitialize(void)
+{
+}
 
-#ifdef CONFIG_GPSTEST_AUTO_START
-gpstest &
-#endif
+void board_finalinitialize(void)
+{
+}
 
-#ifdef CONFIG_TCPTEST_AUTO_START
-tcptest -a CONFIG_SERVICES_TCPTEST_REMOTE_IP -p CONFIG_SERVICES_TCPTEST_REMOTE_PORT &
-#endif
-
-#ifdef CONFIG_FISHDEMO_AUTO_START
-fishdemo &
-#endif
-
-#ifdef CONFIG_SERVICES_SOFTSIM
-mount -t hostfs -o fs=/dev /devsp
-softsim &
 #endif

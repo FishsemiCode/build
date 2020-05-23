@@ -1,8 +1,8 @@
 /****************************************************************************
- * configs/u1/ap/ld.script
+ * configs/u2/ck/ld.script
  *
- *   Copyright (C) 2017 Pinecone Inc. All rights reserved.
- *   Author: Xiang Xiao <xiaoxiang@pinecone.net>
+ *   Copyright (C) 2018 Pinecone Inc. All rights reserved.
+ *   Author: Wang Yanjiong <wangyanjiong@pinecone.net>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -33,12 +33,10 @@
  *
  ****************************************************************************/
 
-#include <nuttx/config.h>
-
 MEMORY
 {
-	flash (rx) : ORIGIN = 0x00000000, LENGTH = 448K
-	sram (rwx) : ORIGIN = 0x21004000, LENGTH = 176K
+	sram (rwx)  : ORIGIN = 0x60000000, LENGTH = 1024K /* 1280 - 256 */
+	shram (rwx) : ORIGIN = 0x6013f000, LENGTH = 4K
 }
 
 ENTRY(_stext)
@@ -53,7 +51,7 @@ SECTIONS
 		/* image magic */
 		LONG(0x21494350)
 		LONG(_stext)
-		LONG(_eflash - _stext)
+		LONG(_edata - _stext)
 		LONG(__start)
 
 		*(.text .text.*)
@@ -67,30 +65,25 @@ SECTIONS
 		*(.gcc_except_table)
 		*(.gnu.linkonce.r.*)
 		_etext = ABSOLUTE(.);
-	} > flash
+	} > sram
 
 	.init_section : {
 		_sinit = ABSOLUTE(.);
 		KEEP(*(.init_array .init_array.*))
 		_einit = ABSOLUTE(.);
-	} > flash
+	} > sram
 
-	.ARM.extab : {
-		*(.ARM.extab*)
-	} > flash
+	.copy.table : {
+		_scopytable = ABSOLUTE(.);
+		LONG(LOADADDR(.resource_table.audio))
+		LONG(ADDR(.resource_table.audio))
+		LONG(ADDR(.resource_table.audio) + SIZEOF(.resource_table.audio))
+		_ecopytable = ABSOLUTE(.);
+	} > sram
 
-	__exidx_start = ABSOLUTE(.);
-	.ARM.exidx : {
-		*(.ARM.exidx*)
-	} > flash
-	__exidx_end = ABSOLUTE(.);
-
-	_framfuncs = LOADADDR(.ramfunc);
-	.ramfunc : {
-		_sramfuncs = ABSOLUTE(.);
-		*(.ramfunc .ramfunc.*)
-		_eramfuncs = ABSOLUTE(.);
-	} > sram AT > flash
+	.resource_table.audio : {
+		*(.resource_table.audio)
+	} > shram AT > sram
 
 	_eronly = LOADADDR(.data);
 	.data : {
@@ -99,13 +92,6 @@ SECTIONS
 		*(.gnu.linkonce.d.*)
 		CONSTRUCTORS
 		_edata = ABSOLUTE(.);
-	} > sram AT > flash
-
-	_eflash = LOADADDR(.data) + SIZEOF(.data);
-
-	.noload (NOLOAD) : {
-		*(.dma .dma.*)
-		*(.ram_vectors .ram_vectors.*)
 	} > sram
 
 	.bss : {
@@ -117,11 +103,7 @@ SECTIONS
 		_ebss = ABSOLUTE(.);
 	} > sram
 
-	_eheap = _sdumplog;
-
-	_sdumplog = _edumplog - _dumplogsize;
-	_edumplog = ORIGIN(sram) + LENGTH(sram);
-	_dumplogsize = 4096;
+	_eheap = ORIGIN(sram) + LENGTH(sram);
 
 	/* Stabs debugging sections. */
 	.stab 0 : { *(.stab) }

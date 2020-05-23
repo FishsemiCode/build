@@ -187,6 +187,11 @@ void board_lateinitialize(void)
   if(mtd)
     {
       register_mtddriver("/dev/data", mtd, 0, mtd);
+      setenv_global("external-flash", "Y", 1);
+    }
+  else
+    {
+      setenv_global("external-flash", "N", 1);
     }
 #endif
 }

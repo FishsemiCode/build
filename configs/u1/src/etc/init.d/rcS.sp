@@ -80,3 +80,7 @@
 #ifdef CONFIG_RPMSG_USRSOCK
   usrsock &
 #endif
+
+#ifdef CONFIG_SERVICES_SOFTSIM
+softsim &
+#endif
