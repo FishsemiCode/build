@@ -58,7 +58,9 @@ SECTIONS
 		*(.text .text.*)
 		*(.fixup)
 		*(.gnu.warning)
+		_srodata = ABSOLUTE(.);
 		*(.rodata .rodata.*)
+		_erodata = ABSOLUTE(.);
 		*(.gnu.linkonce.t.*)
 		*(.glue_7)
 		*(.glue_7t)
