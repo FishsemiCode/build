@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-configs=()
+boards=()
 commands=()
 
 ROOTDIR=$(cd "$( dirname "$0"  )" && pwd)
@@ -177,7 +177,7 @@ function build_board()
 	fi
 
 	if [ -f ${product_out}/defconfig ]; then
-		cp ${product_out}/defconfig ${ROOTDIR}/configs/${1}
+		cp ${product_out}/defconfig ${ROOTDIR}/boards/${1}
 	fi
 
 	if [ -f ${product_out}/nuttx.bin ]; then
@@ -225,7 +225,7 @@ while [ ! -z "$1" ]; do
 
 			if [ "${config_list[*]}" ]; then
 				for config in ${config_list[*]}; do
-					configs[${#configs[@]}]=song/${config}
+					boards[${#boards[@]}]=song/${config}
 				done
 			else
 				echo "Error: Unable to find the board or configurations from $1"
@@ -243,11 +243,11 @@ while [ ! -z "$1" ]; do
 		* )
 
 			find_config=
-			if [ -d "${ROOTDIR}/configs/song/$1" ]; then
-				configs[${#configs[@]}]=song/$1
+			if [ -d "${ROOTDIR}/boards/song/$1" ]; then
+				boards[${#boards[@]}]=song/$1
 				find_config=true
-			elif [ -d "${ROOTDIR}/configs/$1" ]; then
-				configs[${#configs[@]}]=$1
+			elif [ -d "${ROOTDIR}/boards/$1" ]; then
+				boards[${#boards[@]}]=$1
 				find_config=true
 			fi
 
@@ -259,14 +259,14 @@ while [ ! -z "$1" ]; do
 	shift
 done
 
-if [ -n "${configs[*]}" ]; then
-	for config in ${configs[*]}; do
+if [ -n "${boards[*]}" ]; then
+	for config in ${boards[*]}; do
 		build_board ${config}
 	done
 	exit $?
 else
-	configs=`get_config_list ${DEFAULT_PROJECT}`
-	for config in ${configs[*]}; do
+	boards=`get_config_list ${DEFAULT_PROJECT}`
+	for config in ${boards[*]}; do
 		build_board song/${config}
 	done
 fi

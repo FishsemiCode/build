@@ -37,7 +37,7 @@
 
   /* Mount RAMDISK */
 
-  #ifdef CONFIG_RAMDISK
+  #ifdef CONFIG_SONG_RAMDISK
     mount -t littlefs -o autoformat /dev/ram1 /disksp
     if [ $? -eq 0 ]; then
       mkdir /disksp/retent >/dev/null

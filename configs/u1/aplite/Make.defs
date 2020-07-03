@@ -37,4 +37,4 @@ include ${TOPDIR}/.config
 include ${TOPDIR}/tools/Config.mk
 include ${TOPDIR}/arch/arm/src/song/Toolchain.defs
 
-LDSCRIPT = $(TOPDIR)/configs/song/u1/aplite/ld.script
+LDSCRIPT = $(TOPDIR)/boards/song/u1/aplite/ld.script

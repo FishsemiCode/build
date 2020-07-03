@@ -43,10 +43,12 @@
 #include <arch/board/board.h>
 #include <nuttx/ioexpander/ioexpander.h>
 #include <nuttx/ioexpander/gpio.h>
+#include <nuttx/pinctrl/pinctrl.h>
 #include <nuttx/leds/fishled.h>
 #include <nuttx/lcd/ili9486_lcd.h>
 #include <nuttx/mtd/mtd.h>
 #include <nuttx/i2c/tca6424a.h>
+#include <nuttx/sensors/cs1237.h>
 
 #if defined(CONFIG_U1_AP) || defined(CONFIG_U1_APLITE)
 
@@ -77,6 +79,23 @@ static void up_lcd_ili9486_init(void)
   };
 
   lcd_ili9486_register(&config, g_spi[0], g_ioe[0]);
+}
+#endif
+
+#ifdef CONFIG_SENSORS_CS1237
+static void cs1237_init(void)
+{
+  static struct cs1237_config_s config =
+  {
+    .refo = CS1237_REFO_ON,
+    .pga = CS1237_PGA_1,
+    .freq = CS1237_FREQ_10HZ,
+    .ch = CS1237_CH_A,
+    .clk_io = 14,
+    .data_io = 13,
+  };
+
+  cs1237_register("/dev/cs12370", g_pinctrl[0], g_ioe[0], &config);
 }
 #endif
 
@@ -121,6 +140,10 @@ void board_lateinitialize(void)
 #ifdef CONFIG_I2C_TCA6424A
   tca6424a_register(g_i2c[0], 0);
   tca6424a_register(g_i2c[1], 1);
+#endif
+
+#ifdef CONFIG_SENSORS_CS1237
+  cs1237_init();
 #endif
 }
 
