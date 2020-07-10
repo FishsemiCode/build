@@ -45,6 +45,7 @@
 #include <nuttx/ioexpander/gpio.h>
 #include <nuttx/pinctrl/pinctrl.h>
 #include <nuttx/leds/fishled.h>
+#include <nuttx/lcd/vk1056b_lcd.h>
 #include <nuttx/lcd/ili9486_lcd.h>
 #include <nuttx/mtd/mtd.h>
 #include <nuttx/i2c/tca6424a.h>
@@ -63,6 +64,21 @@ extern int ap_ads7843e_tsc_setup(void);
 /****************************************************************************
  * Private Functions
  ****************************************************************************/
+
+#ifdef CONFIG_LCD_VK1056B
+static void up_lcd_vk1056b_init(void)
+{
+  static const struct lcd_vk1056b_config_s config =
+  {
+    .power_gpio = 37,
+    .cs_gpio = 22,
+    .wr_gpio = 21,
+    .data_gpio = 19,
+  };
+
+  lcd_vk1056b_register(&config, g_ioe[0]);
+}
+#endif
 
 #ifdef CONFIG_LCD_ILI9486
 static void up_lcd_ili9486_init(void)
@@ -119,6 +135,10 @@ void board_lateinitialize(void)
 
 #ifdef CONFIG_SNSHUB_DRIVER_ICM42605
   gpio_lower_half(g_ioe[0], 10, GPIO_INTERRUPT_RISING_PIN, 10);
+#endif
+
+#ifdef CONFIG_LCD_VK1056B
+  up_lcd_vk1056b_init();
 #endif
 
 #ifdef CONFIG_LCD_ILI9486
