@@ -194,6 +194,15 @@ void board_lateinitialize(void)
       setenv_global("external-flash", "N", 1);
     }
 #endif
+
+  if (id && !strncmp(id, "DTU1", 4))
+    {
+      syslog(0, "It is DTU1 board!\n");
+      IOEXP_SETDIRECTION(g_ioe[0], 38, IOEXPANDER_DIRECTION_OUT);
+      IOEXP_SETDIRECTION(g_ioe[0], 39, IOEXPANDER_DIRECTION_OUT);
+      IOEXP_WRITEPIN(g_ioe[0], 38, true);
+      IOEXP_WRITEPIN(g_ioe[0], 39, true);
+    }
 }
 
 void board_finalinitialize(void)
