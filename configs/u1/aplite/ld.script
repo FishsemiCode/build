@@ -38,7 +38,7 @@
 MEMORY
 {
 	flash (rx) : ORIGIN = 0x00000000, LENGTH = 640K
-	sram (rwx) : ORIGIN = 0x21004000, LENGTH = 176K
+	sram (rwx) : ORIGIN = 0x2100c000, LENGTH = 144K
 }
 
 ENTRY(_stext)
