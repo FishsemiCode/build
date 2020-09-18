@@ -48,5 +48,6 @@ endif
 
 VPATH += :etc/init.d
 DEPPATH += --dep-path etc/init.d
+DEPPATH += --dep-path .
 
 include $(TOPDIR)/boards/Board.mk

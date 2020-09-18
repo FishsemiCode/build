@@ -39,4 +39,5 @@ RCSRCS := rcS
 RCRAWS += etc/ringtone
 VPATH += :etc/init.d
 DEPPATH += --dep-path etc/init.d
+DEPPATH += --dep-path .
 include $(TOPDIR)/boards/Board.mk
