@@ -43,7 +43,12 @@ endif
 
 RCSRCS := rcS
 ifeq ($(CONFIG_NBIOT_MODEM),y)
-RCRAWS += etc/NVM
+ifeq ($(CONFIG_NEW_HLS_MODULE),y)
+RCRAWS += etc/NVM/NvmBaseData.bin
+else
+RCRAWS += etc/NVM/NvmBaseData_R13.bin
+endif
+RCRAWS += etc/NVM/RfNvmData.bin
 endif
 
 VPATH += :etc/init.d
