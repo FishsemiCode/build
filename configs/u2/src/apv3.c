@@ -1,8 +1,8 @@
 /****************************************************************************
- * configs/u2/src/init.d/rcS
+ * configs/u2/src/ap.c
  *
  *   Copyright (C) 2018 Pinecone Inc. All rights reserved.
- *   Author: Pinecone <Pinecone@pinecone.net>
+ *   Author: Xiang Xiao <xiaoxiang@pinecone.net>
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -32,24 +32,47 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  ****************************************************************************/
-set +e
+
+/****************************************************************************
+ * Included Files
+ ****************************************************************************/
 
 #include <nuttx/config.h>
-
-#include "rcS.first"
-
-#ifdef CONFIG_U2_AP
-#  include "rcS.ap"
-#elif CONFIG_U2_APV3
-#  include "rcS.apv3"
-#elif CONFIG_U2_AUDIO
-#  include "rcS.audio"
-#elif CONFIG_U2_CK
-#  include "rcS.ck"
-#elif CONFIG_U2_M4
-#  include "rcS.m4"
-#else
-#  error "unknow u2 config"
+#ifdef CONFIG_PSEUDOTERM
+#include <nuttx/serial/pty.h>
 #endif
 
-#include "rcS.last"
+#include <arch/board/board.h>
+#ifdef CONFIG_DEV_GPIO
+#include <arch/chip/chip.h>
+#include <nuttx/ioexpander/gpio.h>
+#endif
+
+#if defined(CONFIG_U2_APV3)
+
+/****************************************************************************
+ * Public Functions
+ ****************************************************************************/
+
+void board_earlyinitialize(void)
+{
+}
+
+void board_lateinitialize(void)
+{
+#ifdef CONFIG_PSEUDOTERM
+  pty_register(0);
+#endif
+
+#ifdef CONFIG_DEV_GPIO
+  (void)gpio_lower_half(g_ioe[0], 0, GPIO_INPUT_PIN, 0);
+  (void)gpio_lower_half(g_ioe[0], 4, GPIO_INPUT_PIN, 4);
+  (void)gpio_lower_half(g_ioe[0], 5, GPIO_INPUT_PIN, 5);
+#endif
+}
+
+void board_finalinitialize(void)
+{
+}
+
+#endif

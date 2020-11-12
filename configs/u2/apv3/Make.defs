@@ -1,8 +1,8 @@
 ############################################################################
-# configs/u2/src/Makefile
+# configs/u2/apv3/Make.defs
 #
 #   Copyright (C) 2017 Pinecone Inc. All rights reserved.
-#   Author: Xiang Xiao <xiaoxiang@pinecone.net>
+#   Author: Wang Yanjiong <wangyanjiong@pinecone.net>
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -33,11 +33,8 @@
 #
 ############################################################################
 
--include $(TOPDIR)/Make.defs
-CSRCS  := ap.c apv3.c audio.c ck.c m4.c
-RCSRCS := rcS
-RCRAWS += etc/ringtone
-VPATH += :etc/init.d
-DEPPATH += --dep-path etc/init.d
-DEPPATH += --dep-path .
-include $(TOPDIR)/boards/Board.mk
+include ${TOPDIR}/.config
+include ${TOPDIR}/tools/Config.mk
+include ${TOPDIR}/arch/risc-v/src/song/Toolchain.defs
+
+LDSCRIPT = $(TOPDIR)/boards/song/u2/apv3/ld.script
