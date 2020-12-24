@@ -64,16 +64,10 @@
  * Private Functions
  ****************************************************************************/
 
-static inline bool chip_is_u1v1(void)
-{
-  return (*(volatile uint32_t *)(TOP_PMICFSM_PLLTIME)) == 0xdeadbeaf;
-}
-
 #ifdef CONFIG_MTD_GD25
 static int evb_ldo4_init(void)
 {
   FAR struct regulator *reg;
-  FAR bool module;
 
   reg = regulator_get(NULL, "ldo4");
   if (!reg)
@@ -82,26 +76,9 @@ static int evb_ldo4_init(void)
       return -ENODEV;
     }
 
-  /* XXX: temporarily set the board_id gpio pinmux, later
-   * we will use official pinmux api instead */
-  if (chip_is_u1v1())
-    {
-      putreg32(0x12, MUX_PIN18);
-      IOEXP_SETDIRECTION(g_ioe[0], 18, IOEXPANDER_DIRECTION_IN);
-      IOEXP_READPIN(g_ioe[0], 18, &module);
-    }
-  else
-    {
-      module = false;
-    }
-
   /* provide different voltage for gd25 between module board and evb:
-   * module ---> 1.8V
    * evb    ---> 3.3V */
-  if (module)
-    regulator_set_voltage(reg, 1800000, 1800000);
-  else
-    regulator_set_voltage(reg, 3300000, 3300000);
+  regulator_set_voltage(reg, 3300000, 3300000);
 
   if (regulator_enable(reg))
     {
