@@ -86,3 +86,7 @@ fishdemo &
 mount -t hostfs -o fs=/dev /devsp
 softsim &
 #endif
+
+#ifdef CONFIG_FISH_NB_AUTO_START
+fishnb &
+#endif
