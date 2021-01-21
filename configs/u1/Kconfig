@@ -30,4 +30,7 @@ config U1_RECOVERY
 config U1_SIM
 	bool "U1 SIM"
 
+config U1_APFACTORY
+	bool "U1 APFACTORY"
+
 endchoice
