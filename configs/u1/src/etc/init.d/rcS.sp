@@ -46,7 +46,9 @@
 
   /* Mount externl nand-flash to /nand */
 
+#ifdef CONFIG_MTD_GD5F
   mount -t littlefs -o autoformat /dev/data-nand /nand > /dev/null
+#endif
 
   /* Mount external flash to /persist */
 
@@ -63,18 +65,7 @@
   /* Mount internal flash to /onchip */
 
   mount -t littlefs -o autoformat /dev/persist /onchip
-  if [ $? -eq 0 ]; then
-    if [ ! -d "/data" ]; then
-    mkdir /onchip/chipap >/dev/null
-    fi
-  fi
 
-#endif
-
-#ifdef CONFIG_FS_TMPFS
-  if [ ! -d "/data" ]; then
-    ln -s /tmp /data
-  fi
 #endif
 
 #ifdef CONFIG_RPMSG_USRSOCK

@@ -46,7 +46,9 @@
 
   /* Mount externl nand-flash to /nand */
 
+#ifdef CONFIG_MTD_GD5F
   mount -t littlefs -o autoformat /dev/data-nand /nand > /dev/null
+#endif
 
   /* Mount external flash to /persist */
 

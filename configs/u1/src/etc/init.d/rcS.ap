@@ -46,7 +46,9 @@ mount -t unionfs -o fspath1=/proc1,fspath2=/net2,prefix2=net CONFIG_NSH_PROC_MOU
 #ifdef CONFIG_FS_HOSTFS_RPMSG
 mount -t hostfs -o fs=/data /data
 mount -t hostfs -o fs=/services /services
+#ifdef CONFIG_MTD_GD5F
 mount -t hostfs -o fs=/nand /nand
+#endif
 mount -t hostfs -o fs=/log /log
 #endif
 
