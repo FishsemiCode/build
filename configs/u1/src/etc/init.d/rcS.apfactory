@@ -88,6 +88,10 @@ fishdemo &
 fishpm &
 #endif
 
+#ifdef CONFIG_FISHLED
+fishled &
+#endif
+
 #ifdef CONFIG_SERVICES_SOFTSIM
 mount -t hostfs -o fs=/dev /devsp
 softsim &

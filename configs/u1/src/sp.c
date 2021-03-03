@@ -62,6 +62,8 @@
 
 #define TOP_PMICFSM_BASE            (0xb2010000)
 #define TOP_PMICFSM_PLLTIME         (TOP_PMICFSM_BASE + 0xe8)
+#define TOP_PMICFSM_WAKEUP_REASON   (TOP_PMICFSM_BASE + 0x18)
+#define TOP_PMICFSM_RTC             (1 << 3)
 
 #define AP_TCM_BASE                 (0xb1000000)
 #define AP_TCM_NB_OFFSET            (0xc000)
@@ -143,7 +145,6 @@ void board_lateinitialize(void)
 {
   FAR struct mtd_dev_s *mtd;
   char *id;
-  char *env;
 
   id = getenv_global("board-id");
   if(id && !strncmp(id, "U1BX", 4))
@@ -196,8 +197,8 @@ void board_lateinitialize(void)
 
   if((strncmp(id, "U1BX", 4) == 0) || (strncmp(id, "U1TK", 4) == 0))
     {
-      env = getenv_global ("POWERON_RST");
-      if (env && !strcmp(env, "y"))
+      uint32_t val = getreg32(TOP_PMICFSM_WAKEUP_REASON);
+      if (!(val & TOP_PMICFSM_RTC))
         {
           /* Fishnb ram clear */
 

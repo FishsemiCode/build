@@ -115,6 +115,25 @@ static void cs1237_init(void)
 }
 #endif
 
+#ifdef CONFIG_FISHLED
+static void fishled_init(void)
+{
+  static const struct led_config_s config[] =
+  {
+    {
+      .gpio_port = 31,
+      .level = 1,
+    },
+    {
+      .gpio_port = 32,
+      .level = 0,
+    },
+  };
+
+  fishled_initialize(g_ioe[0], &config[0], sizeof(config) / sizeof((config)[0]));
+}
+#endif
+
 /****************************************************************************
  * Public Functions
  ****************************************************************************/
@@ -130,7 +149,7 @@ void board_lateinitialize(void)
 #endif
 
 #ifdef CONFIG_FISHLED
-  fishled_initialize(g_ioe[0]);
+  fishled_init();
 #endif
 
 #ifdef CONFIG_SNSHUB_DRIVER_ICM42605
