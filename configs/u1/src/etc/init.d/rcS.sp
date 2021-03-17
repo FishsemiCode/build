@@ -50,22 +50,6 @@
   mount -t littlefs -o autoformat /dev/data-nand /nand > /dev/null
 #endif
 
-  /* Mount external flash to /persist */
-
-  mount -t littlefs -o autoformat /dev/data /persist >/dev/null
-  /* if [ $? -eq 0 ]; then
-    mkdir /persist/data >/dev/null
-    mkdir /persist/services >/dev/null
-    mkdir /persist/log >/dev/null
-    ln -s /persist/data data
-    ln -s /persist/services services
-    ln -s /persist/log log
-  fi */
-
-  /* Mount internal flash to /onchip */
-
-  /* mount -t littlefs -o autoformat /dev/persist /onchip */
-
 #endif
 
 #ifdef CONFIG_RPMSG_USRSOCK

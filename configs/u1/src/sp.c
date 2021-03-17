@@ -48,8 +48,6 @@
 #include <arch/board/board.h>
 #include <string.h>
 
-#include <sys/mount.h>
-
 #if defined(CONFIG_U1_SP) || defined(CONFIG_U1_RECOVERY)
 
 /****************************************************************************
@@ -57,22 +55,12 @@
  ****************************************************************************/
 
 #define putreg32(v,a)               (*(volatile uint32_t *)(a) = (v))
-#define getreg32(a)                 (*(volatile uint32_t *)(a))
 #define MUX_PIN18                   (0xb0050038)
 
 #define TOP_PMICFSM_BASE            (0xb2010000)
 #define TOP_PMICFSM_PLLTIME         (TOP_PMICFSM_BASE + 0xe8)
 #define TOP_PMICFSM_WAKEUP_REASON   (TOP_PMICFSM_BASE + 0x18)
 #define TOP_PMICFSM_RTC             (1 << 3)
-
-#define AP_TCM_BASE                 (0xb1000000)
-#define AP_TCM_NB_OFFSET            (0xc000)
-#define AP_TCM_NB                   (AP_TCM_BASE + AP_TCM_NB_OFFSET)
-#define AP_TCM_LENGTH               (2048)
-#define START_NB_FLAG               (6)
-#define NB_MODE                     (0x1c)
-#define NB_MODE_RECORD              (3)
-#define START_NB                    (1)
 
 /****************************************************************************
  * Private Functions
@@ -194,29 +182,7 @@ void board_lateinitialize(void)
       IOEXP_WRITEPIN(g_ioe[0], 38, true);
       IOEXP_WRITEPIN(g_ioe[0], 39, true);
     }
-
-  if((strncmp(id, "U1BX", 4) == 0) || (strncmp(id, "U1TK", 4) == 0))
-    {
-      uint32_t val = getreg32(TOP_PMICFSM_WAKEUP_REASON);
-      if (!(val & TOP_PMICFSM_RTC))
-        {
-          /* Fishnb ram clear */
-
-          memset((uint32_t *)AP_TCM_NB, 0, AP_TCM_LENGTH);
-          mount("/dev/persist", "/onchip", "littlefs", 0, NULL);
-        }
-      else if((uint8_t)(getreg32(AP_TCM_NB + NB_MODE)) != NB_MODE_RECORD || \
-        (uint8_t)(getreg32(AP_TCM_NB + NB_MODE) == NB_MODE_RECORD && getreg32(AP_TCM_NB + START_NB_FLAG) == START_NB))
-        {
-          mount("/dev/persist", "/onchip", "littlefs", 0, NULL);
-        }
-    }
-  else
-    {
-      mount("/dev/persist", "/onchip", "littlefs", 0, NULL);
-    }
 }
-
 
 void board_finalinitialize(void)
 {

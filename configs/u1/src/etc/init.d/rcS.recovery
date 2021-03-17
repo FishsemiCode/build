@@ -80,5 +80,6 @@
 #endif
 
 #ifdef CONFIG_SYSTEM_RECOVERY
+mount -t tmpfs /tmp
 recovery &
 #endif

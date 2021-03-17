@@ -36,7 +36,7 @@
 #ifdef CONFIG_FS_HOSTFS_RPMSG
 mount -t hostfs -o fs=/onchip /onchip
 mount -t hostfs -o fs=/persist /persist
-mount -t hostfs -o fs=/log /log
+mount -t hostfs -o fs=/persist/log /log
 #endif
 
 #ifdef CONFIG_NBIOT_MODEM
