@@ -41,7 +41,7 @@
 
 #include <arch/board/board.h>
 
-#ifdef CONFIG_U1_CP
+#if defined(CONFIG_U1_CP) || defined(CONFIG_U1_CPU1X)
 
 /****************************************************************************
  * Public Functions

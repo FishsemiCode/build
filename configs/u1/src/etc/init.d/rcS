@@ -42,9 +42,13 @@ set +e
 #  include "rcS.ap"
 #elif CONFIG_U1_APLITE
 #  include "rcS.ap"
+#elif CONFIG_U1_APU1X
+#  include "rcS.ap"
 #elif CONFIG_U1_CK
 #  include "rcS.ck"
 #elif CONFIG_U1_CP
+#  include "rcS.cp"
+#elif CONFIG_U1_CPU1X
 #  include "rcS.cp"
 #elif CONFIG_U1_SP
 #  include "rcS.sp"

@@ -48,7 +48,11 @@ RCRAWS += etc/NVM/NvmBaseData.bin
 else
 RCRAWS += etc/NVM/NvmBaseData_R13.bin
 endif
+ifeq ($(CONFIG_U1_CPU1X),y)
+RCRAWS += etc/NVM/RfNvmData_d2d.bin
+else
 RCRAWS += etc/NVM/RfNvmData.bin
+endif
 endif
 
 VPATH += :etc/init.d

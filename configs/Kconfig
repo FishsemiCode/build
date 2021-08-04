@@ -48,9 +48,24 @@ config ARCH_BOARD_V1
 
 endchoice
 
+if ARCH_BOARD_ABIES
+source "boards/song/abies/Kconfig"
+endif
+if ARCH_BOARD_BANKS
+source "boards/song/banks/Kconfig"
+endif
 if ARCH_BOARD_U1
 source "boards/song/u1/Kconfig"
 endif
+if ARCH_BOARD_U11
+source "boards/song/u11/Kconfig"
+endif
 if ARCH_BOARD_U2
 source "boards/song/u2/Kconfig"
+endif
+if ARCH_BOARD_U3
+source "boards/song/u3/Kconfig"
+endif
+if ARCH_BOARD_V1
+source "boards/song/v1/Kconfig"
 endif

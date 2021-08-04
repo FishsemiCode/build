@@ -51,7 +51,8 @@
 #include <nuttx/i2c/tca6424a.h>
 #include <nuttx/sensors/cs1237.h>
 
-#if defined(CONFIG_U1_AP) || defined(CONFIG_U1_APLITE) || defined(CONFIG_U1_APFACTORY)
+#if defined(CONFIG_U1_AP) || defined(CONFIG_U1_APLITE) || \
+      defined(CONFIG_U1_APFACTORY) || defined(CONFIG_U1_APU1X)
 
 /****************************************************************************
  * Public Functions Prototypes
@@ -190,4 +191,5 @@ void board_finalinitialize(void)
 {
 }
 
-#endif /* defined(CONFIG_U1_AP) || defined(CONFIG_U1_APLITE) */
+#endif /* defined(CONFIG_U1_AP) || defined(CONFIG_U1_APLITE)
+          defined(CONFIG_U1_APFACTORY) || defined(CONFIG_U1_APU1X)  */
