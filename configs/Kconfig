@@ -41,6 +41,11 @@ config ARCH_BOARD_U3
 	---help---
 		Pinecone U3 MCU.
 
+config ARCH_BOARD_U31
+	bool "Pinecone U31"
+	---help---
+		Pinecone U31 MCU.
+
 config ARCH_BOARD_V1
 	bool "Pinecone V1"
 	---help---

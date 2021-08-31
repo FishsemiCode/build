@@ -32,6 +32,7 @@ PROJECTS=(\
 		"u11" \
 		"u2" \
 		"u3" \
+		"u31" \
 		"v1" )
 
 CONFIGS=(\
@@ -72,6 +73,10 @@ CONFIGS=(\
 		u3/cpr
 		u3/cpx
 		u3/qemu
+		" \
+		"
+		u31/ap
+		u31/cpr
 		" \
 		"
 		v1/vision
@@ -188,7 +193,7 @@ function build_board()
 		cp -f ${product_out}/nuttx.bin ${OUTDIR}/${product}
 	fi
 
-	if [[ ${core} == "u2/audio" ]] || [[ ${core} == "u3/cpr" ]]; then
+	if [[ ${core} == "u2/audio" ]] || [[ ${core} == "u3/cpr" ]] || [[ ${core} == "u31/cpr" ]]; then
 		if [ -f ${product_out}/nuttx.strip ]; then
 			cp -f ${product_out}/nuttx.strip ${OUTDIR}/${elf}
 		fi
