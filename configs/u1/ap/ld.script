@@ -37,9 +37,11 @@
 
 MEMORY
 {
-	flash (rx)       : ORIGIN = 0x00000000, LENGTH = 448K
-	fishnbsram (rwx) : ORIGIN = 0x2100c000, LENGTH = 2K
-	sram (rwx)       : ORIGIN = 0x2100c800, LENGTH = 142K
+    flash (rx)       : ORIGIN = 0x00000000, LENGTH = 448K
+    rtcsram (rwx)    : ORIGIN = 0x2100c000, LENGTH = 1K
+    savesram (rwx)   : ORIGIN = 0x2100c400, LENGTH = 1K
+    fishnbsram (rwx) : ORIGIN = 0x2100c800, LENGTH = 2K
+    sram (rwx)       : ORIGIN = 0x2100d000, LENGTH = 140K
 }
 
 ENTRY(_stext)
@@ -88,6 +90,21 @@ SECTIONS
 		*(.ARM.exidx*)
 	} > flash
 	__exidx_end = ABSOLUTE(.);
+
+    _rtcdata = LOADADDR(.rtcdata);
+    .rtcdata : {
+            _srtcdata = ORIGIN(rtcsram);
+            *(.rtcdata .rtcdata.*)
+            _ertcdata = ORIGIN(rtcsram) + LENGTH(rtcsram);
+    } > rtcsram
+
+    _savedata = LOADADDR(.savedata);
+    .savedata : {
+            _ssavedata = ORIGIN(savesram);
+            *(.savedata .savedata.*)
+            _esavedata = ORIGIN(savesram) + LENGTH(savesram);
+    } > savesram
+
 
 	_reserdata = LOADADDR(.reserdata);
 	.reserdata : {
