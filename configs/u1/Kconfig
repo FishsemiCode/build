@@ -27,6 +27,9 @@ config U1_CPU1X
 config U1_SP
 	bool "U1 SP"
 
+config U1_SPU1X
+	bool "U1 SPU1X"
+
 config U1_FVP
 	bool "U1 FVP"
 

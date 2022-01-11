@@ -52,6 +52,8 @@ set +e
 #  include "rcS.cp"
 #elif CONFIG_U1_SP
 #  include "rcS.sp"
+#elif CONFIG_U1_SPU1X
+#  include "rcS.sp"
 #elif CONFIG_U1_FVP
 #  include "rcS.fvp"
 #elif CONFIG_U1_RECOVERY

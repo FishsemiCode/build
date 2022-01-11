@@ -54,6 +54,7 @@ CONFIGS=(\
 		u1/cp
 		u1/cpu1x
 		u1/sp
+		u1/spu1x
 		u1/recovery
 		" \
 		"

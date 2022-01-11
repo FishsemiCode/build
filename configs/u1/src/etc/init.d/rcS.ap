@@ -92,3 +92,7 @@ softsim &
 #ifdef CONFIG_FISH_NB_AUTO_START
 fishnb &
 #endif
+
+#ifdef CONFIG_SERVICES_TALK
+talk &
+#endif

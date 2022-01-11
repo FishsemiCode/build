@@ -43,14 +43,15 @@ endif
 
 RCSRCS := rcS
 ifeq ($(CONFIG_NBIOT_MODEM),y)
+ifeq ($(CONFIG_U1_CPU1X),y)
+RCRAWS += etc/NVM/NvmBaseData_d2d.bin
+RCRAWS += etc/NVM/RfNvmData_d2d.bin
+else
 ifeq ($(CONFIG_NEW_HLS_MODULE),y)
 RCRAWS += etc/NVM/NvmBaseData.bin
 else
 RCRAWS += etc/NVM/NvmBaseData_R13.bin
 endif
-ifeq ($(CONFIG_U1_CPU1X),y)
-RCRAWS += etc/NVM/RfNvmData_d2d.bin
-else
 RCRAWS += etc/NVM/RfNvmData.bin
 endif
 endif
