@@ -50,6 +50,7 @@ CONFIGS=(\
 		u1/aplite
 		u1/apu1x
 		u1/apfactory
+		u1/apfishnb
 		u1/ck
 		u1/cp
 		u1/cpu1x

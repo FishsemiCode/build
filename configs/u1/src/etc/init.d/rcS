@@ -44,6 +44,8 @@ set +e
 #  include "rcS.ap"
 #elif CONFIG_U1_APU1X
 #  include "rcS.ap"
+#elif CONFIG_U1_APFISHNB
+#  include "rcS.ap"
 #elif CONFIG_U1_CK
 #  include "rcS.ck"
 #elif CONFIG_U1_CP

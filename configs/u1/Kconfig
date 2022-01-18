@@ -42,4 +42,7 @@ config U1_SIM
 config U1_APFACTORY
 	bool "U1 APFACTORY"
 
+config U1_APFISHNB
+	bool "U1 APFISHNB"
+
 endchoice
